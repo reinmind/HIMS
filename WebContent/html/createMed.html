@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../style/use.css">
+	<link rel="stylesheet" href="../style/bootstrap.min.css">
+	<style>
+		#all {
+			width: 500px;
+			margin: 30px auto;
+			padding: 30px 50px;
+			border-radius: 20px;
+			border: 1px solid #8DB2E3;
+		}
+		#all div.btns {
+			text-align: center;
+		}
+		#all button.btn {
+			width: 100px;
+			margin: 0 20px;
+			margin-top: 30px;
+		}
+		.btnp {
+			padding-left: 10px;
+			height: 27px;
+			line-height: 27px;
+			font-size: 12px;
+			color: #1542B5;
+			background: url("../images/title_bg2.png");
+		}
+	</style>
+	<script src="../js/jquery-1.8.3.min.js"></script>
+	<script src="../js/pid.js"></script>
+	<script>
+		$(function () {
+			
+			$('#name').change(function () {
+				if ($('option:selected').val() != 0) {
+					$.post('payNum', {id: $('option:selected').val()}, function (data) {
+						datas = data.split(":");
+						$('#cardNo').val(datas[0]);
+						$('#balance').val(datas[1]);
+					}, 'text');
+				}
+			});
+			
+			$('#pId').blur(function () {
+				$.post('isRegAjax', {'pId':$('#pId').val()}, function (data) {
+					if (data == 'false') {
+						alert("请先挂号，再建立病人档案！");
+						location.href='reg';
+					}
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<p class="btnp">您当前的位置：<a href="../html/welcome.html">首页</a> > 建立病例档案</p>
+	<div id="all">
+		<form action="medicalrecord/createMedicForm" method="post">
+			<div class="form-group">
+				<label for="pId">患者流水号：<span></span></label>
+				<input type="text" name="pId" class="form-control" 
+					placeholder="请输入患者流水号" id="pId">
+			</div>
+			<div class="form-group">
+				<label for="pId">患者姓名：<span></span></label>
+				<input type="text" name="pName" class="form-control" readonly
+					placeholder="患者姓名" required id="pName" style="background: #eee">
+			</div>
+			<div class="form-group">
+				<label for="docId">医　　生：<span></span></label>
+				<select name="docId" class="form-control" id="docId">
+					<option selected value="0">请选择医生</option>
+					<c:forEach items="${requestScope.showDocAllList}" var="bean">
+						<option value="${bean.id}">${bean.name}</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="chiefComplaint">病人主诉：<span></span></label>
+				<input type="text" name="chiefComplaint" class="form-control" 
+					id="chiefComplaint" placeholder="请输入病人主诉">
+			</div>
+			<div class="form-group">
+				<label for="historyOfPresentIllness">现病史：<span></span></label>
+				<input type="text" name="historyOfPresentIllness" 
+					class="form-control" id="historyOfPresentIllness" placeholder="请输入现病史">
+			</div>
+			<div class="form-group">
+				<label for="pastMedicalHistory">既往史：<span></span></label>
+				<input type="text" name="pastMedicalHistory" required 
+					class="form-control" id="pastMedicalHistory" placeholder="请输入既往史">
+			</div>
+			
+			<div class="btns">
+				<button type="submit" class="btn btn-default">建立</button>
+				<button type="reset" class="btn btn-default">重置</button>
+			</div>
+		</form>	
+	</div>
+</body>
+</html>

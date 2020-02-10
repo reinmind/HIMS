@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../style/use.css">
+	<link rel="stylesheet" href="../style/bootstrap.min.css">
+	<link rel="stylesheet" href="../style/table.css">
+ 	<link rel="stylesheet" href="../style/common.css">
+	<script src="../js/jquery-1.8.3.min.js"></script>
+	<script src="../js/table.js"></script>
+	<script src="../js/btn.js"></script>
+	<script>
+		$(function () {
+			
+			// 显示修改弹框
+			$('.rollIn').click(function(){
+				var count = 0;
+				/* 关于检查项目的修改项 */
+				var id = "";
+				var name = "";
+				var price = "";
+				var unit = "";
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+						id = $($(".table").find(":input").get(i)).parent().parent().children(".id").text();
+						name = $($(".table").find(":input").get(i)).parent().parent().children(".name").text();
+						price = $($(".table").find(":input").get(i)).parent().parent().children(".price").text();
+						unit = $($(".table").find(":input").get(i)).parent().parent().children(".unit").text();
+						count ++;
+					}
+				}
+				if (count == 0) {
+					alert("请勾选要修改的项");
+				} else if (count == 1) {
+					$("#updateId").val(id);
+					$("#updateName").val(name);
+					$("#updatePrice").val(price);
+					$("#updateUnit").val(unit);
+					
+					className = $(this).attr('class');
+					$('#dialogBgUpdate').fadeIn(300);
+					$('#dialogUpdate').removeAttr('class').addClass('animated '+className+'').fadeIn();
+				} else {
+					alert("一次只能修改一行，不能修改多行！");
+				}
+			});
+			
+			
+			// 删除
+			$('.delete').click(function () {
+				var list = "";
+				var count = 0;
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+						list += $($(".table").find(":input").get(i)).val() + ",";
+						count ++;
+					}
+				}
+				if (count != 0) {
+					if (confirm("你确定要删除这" + count + "项吗？")) {
+					}
+				} else {
+					alert("您没有选中任何项！");
+				}
+			});
+			
+		});
+	</script>
+</head>
+<body>
+	<p class="btnp">您当前的位置：<a href="../html/welcome.html">首页</a> > 处置项目管理</p>
+	<div class="btn_bg">
+		<button type="button" class="btn btn-default add bounceInDown">添加收费项目</button>
+		<button type="button" class="btn btn-default update rollIn">修改收费项目</button>
+		<button type="button" class="btn btn-default delete">删除收费项目</button>
+		<button type="button" class="btn btn-default refresh">刷新</button>
+	</div>
+	<!-- 添加处置项目表单 -->
+	<div id="dialogBgAdd"></div>
+	<div id="dialogAdd" class="animated" style="cursor:default; height: 270px; margin-top:-250px;">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="otherfee/add" method="post" id="editFormAdd">
+			<table align="center" class="tandept">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>收费项目：</td>
+					<td align="left"><input type="text" name="name" required value="" placeholder="请输入收费项目的名称" class="ipt"></td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>单　　价：</td>
+					<td align="left"><input type="text" name="price" required value="" placeholder="请输入收费项目的单价" class="ipt"></td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>计量单位：</td>
+					<td align="left"><input type="text" name="unit" required value="" placeholder="请输入收费项目的计量单位" class="ipt"></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!-- 修改处置项目表单 -->
+	<div id="dialogBgUpdate"></div>
+	<div id="dialogUpdate" class="animated" style="cursor:default; height: 270px; margin-top:-130px;">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="otherfee/update" method="post" id="editFormUpdate">
+			<input type="hidden" name="id" id="updateId">
+			<table align="center" class="tandept">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>收费项目：</td>
+					<td align="left"><input type="text" name="name" id="updateName" required placeholder="请输入检查项目的名称" class="ipt"></td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>单　　价：</td>
+					<td align="left"><input type="text" name="price" id="updatePrice" required placeholder="请输入检查项目的费用" class="ipt"></td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>计量单位：</td>
+					<td align="left"><input type="text" name="unit" id="updateUnit" required placeholder="请输入检查项目的费用" class="ipt"></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!-- 处置项目列表 -->
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th class="bg"></th>
+			<th class="bg"><input type="checkbox" name="" class="all" id=""></th>
+			<th class="bg">收费项目名称</th>
+			<th class="bg">单价</th>
+			<th class="bg">计量单位</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="id" align="center">1</td>
+				<td><input type="checkbox" name="id" value="${bean.id}" class="ck" id=""></td>
+				<td class="name">挂号费</td>
+				<td class="price">5.0</td>
+				<td class="unit">次</td>
+			</tr>
+		</tbody>
+		<!-- 分页处理 -->
+		<tfoot>
+			<tr>
+				<td colspan="13">
+					共10条记录 每页 10 条 第1页 
+					<a href="#">首页</a>
+					<a href="#">上一页</a>
+					
+					<a href="#">下一页</a>
+					<a href="#">尾页</a>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
+</html>

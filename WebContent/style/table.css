@@ -1,0 +1,114 @@
+
+
+
+
+p {
+	margin: 0;
+}
+.bg {
+	background: #EDEEF0;
+	/*background: url("../images/th_bg.png");*/
+}
+
+/* 搜索框开始 */
+.search {
+	width: 500px;
+	float: right;
+}
+.search .sea-text {
+	width: 200px;
+	height: 20px;
+	border-radius: 5px;
+	border: 1px solid #eee;
+	padding: 10px;
+	margin-top: 5px;
+	position: absolute;
+	right: 30px;
+	font-size: 12px;
+}
+.search .btn {
+	height: 21px;
+	line-height: 5px;
+	margin-top: 5px;
+	position: absolute;
+	border-radius: 0;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	font-size: 12px;
+	right: 30px;
+}
+
+
+/* 搜索框结束 */
+
+/* 表格中的文字不能被选中，否则点行的时候会很难看 */
+table.table {
+	moz-user-select: -moz-none; 
+	-moz-user-select: none; 
+	-o-user-select:none; 
+	-khtml-user-select:none; /* you could also put this in a class */ 
+	-webkit-user-select:none;/* and add the CSS class here instead */ 
+	-ms-user-select:none; 
+	user-select:none;/**禁止选中文字*/ 
+}
+table.table thead tr th {
+	padding: 0;
+	height: 20px;
+	border-right: 1px solid #ddd;
+	padding-left: 5px;
+}
+table.table tr td {
+	padding: 4px;
+	height: 20px;
+}
+.btn-default {
+	border: none;
+	background: none;
+	padding-left: 30px;
+}
+/* 小图标 */
+button.add {
+	background: url("../images/add.png") no-repeat 10px center;
+}
+button.update {
+	background: url("../images/application_edit.png") no-repeat 10px center;
+}
+button.delete {
+	background: url("../images/cross.png") no-repeat 10px center;
+}
+button.refresh {
+	background: url("../images/arrow_refresh.png") no-repeat 10px center;
+}
+button.getInto {
+	background: url("../images/drug_get_into.png") no-repeat 10px center;
+}
+.btnp {
+	padding-left: 10px;
+	height: 27px;
+	line-height: 27px;
+	font-size: 12px;
+	color: #1542B5;
+	background: url("../images/title_bg2.png");
+}
+.btn_bg {
+    background:-webkit-gradient(linear, 0 0, 0 100%, from(#F9F9F9), to(#EDEEF0));
+    background:-webkit-linear-gradient(#F9F9F9, #EDEEF0);
+    background:-moz-linear-gradient(#F9F9F9, #EDEEF0);
+    background:-o-linear-gradient(#F9F9F9, #EDEEF0);
+    background:linear-gradient(#F9F9F9, #EDEEF0); 
+	/*background: #F9F9F9;*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

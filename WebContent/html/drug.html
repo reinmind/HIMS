@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../style/use.css">
+	<link rel="stylesheet" href="../style/bootstrap.min.css">
+	<link rel="stylesheet" href="../style/table.css">
+	<link rel="stylesheet" href="../style/common.css">
+	<script src="../js/jquery-1.8.3.min.js"></script>
+	<script src="../js/table.js"></script>
+	<script src="../js/btn.js"></script>
+	<script>
+		$(function () {
+			
+			// 显示修改弹框
+			$('.rollIn').click(function(){
+				var count = 0;
+				/* 关于药品的修改项 */
+				var id = "";              /* 药品编号 */
+				var name = "";            /* 药品名称 */
+				var drugclassId = "";     /* 药品类别编号 */
+				var barcode = "";         /* 药品条形 */
+				var dosageform = "";      /* 药品剂型 */
+				var specifications = "";  /* 药品规格 */
+				var unit = "";            /* 药品单位 */
+				var prime_cost = "";      /* 药品进货 */
+				var price = "";           /* 药品售价 */
+				var inventory = "";       /* 药品库存 */
+				var minimum = "";         /* 数量下限 */
+				var introduction = "";    /* 药品简介 */
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+ 						drugclassId = $($(".table").find(":input").get(i)).parent().parent().children(".drugclassId").val();
+ 						id = $($(".table").find(":input").get(i)).parent().parent().children(".id").val();
+						name = $($(".table").find(":input").get(i)).parent().parent().children(".name").text().trim();
+						barcode = $($(".table").find(":input").get(i)).parent().parent().children(".barcode").text().trim();
+						dosageform = $($(".table").find(":input").get(i)).parent().parent().children(".dosageform").text().trim();
+						specifications = $($(".table").find(":input").get(i)).parent().parent().children(".specifications").text().trim();
+						unit = $($(".table").find(":input").get(i)).parent().parent().children(".unit").text().trim();
+						prime_cost = $($(".table").find(":input").get(i)).parent().parent().children(".prime_cost").text().trim();
+						price = $($(".table").find(":input").get(i)).parent().parent().children(".price").text().trim();
+						inventory = $($(".table").find(":input").get(i)).parent().parent().children(".inventory").text().trim();
+						minimum = $($(".table").find(":input").get(i)).parent().parent().children(".minimum").text().trim();
+						introduction = $($(".table").find(":input").get(i)).parent().parent().children(".introduction").text().trim();
+						count ++; 
+					}
+				}
+				if (count == 0) {
+					alert("请勾选要修改的项");
+				} else if (count == 1) {
+ 					$("#updateId").val(id);
+					$("#updateName").val(name);
+					$("#updateDrugclassId").attr("value",drugclassId);
+					$("#updateBarcode").val(barcode);
+					$("#updateDosageform").val(dosageform);
+					$("#updateSpecifications").val(specifications);
+					$("#updateUnit").val(unit);
+					$("#updatePrime_cost").val(prime_cost);
+					$("#updatePrice").val(price);
+					$("#updateInventory").val(inventory);
+					$("#updateMinimum").val(minimum);
+					$("#updateIntroduction").val(introduction); 
+					
+					className = $(this).attr('class');
+					$('#dialogBgUpdate').fadeIn(300);
+					$('#dialogUpdate').removeAttr('class').addClass('animated '+className+'').fadeIn();
+				} else {
+					alert("一次只能修改一行，不能修改多行！");
+				}
+			});
+			
+			// 删除
+			$('.delete').click(function () {
+				var list = "";
+				var count = 0;
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+						list += $($(".table").find(":input").get(i)).val() + ",";
+						count ++;
+					}
+				}
+				if (count != 0) {
+					if (confirm("你确定要删除这" + count + "项吗？")) {
+					}
+				} else {
+					alert("您没有选中任何项！");
+				}
+			});
+			
+		});
+	</script>
+</head>
+<body>
+	<p class="btnp">您当前的位置：<a href="../html/welcome.html">首页</a> > 药品管理</p>
+	<div class="btn_bg">
+		<button type="button" class="btn btn-default add bounceInDown">添加药品</button>
+		<button type="button" class="btn btn-default update rollIn">修改药品</button>
+		<button type="button" class="btn btn-default delete">删除药品</button>
+		<button type="button" class="btn btn-default refresh">刷新</button>
+		<div class="search">
+			<form action="drug/drugName" method="post">
+				<input type="text" class="sea-text" name="name" id="" placeholder="请输入药品名称">
+				<button type="submit" class="btn btn-primary">搜索</button>
+			</form>
+		</div>
+	</div>
+	
+	<!-- 添加药品表单 -->
+	<div id="dialogBgAdd"></div>
+	<div id="dialogAdd" class="animated" style="cursor:default; width: 600px; height: 410px; margin-top:-200px; margin-left: -300px">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="drug/add" method="post" id="editFormUpdate">
+			<table align="center" class="tanstaff">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>药品名称：</td>
+					<td align="left" class="left">
+						<input type="text" name="name" required placeholder="请输入药品的名字" class="ipt">
+					</td>
+					<td align="right" class="right"><font color="#ff0000">  </font>所属类别：</td>
+					<td align="left">
+						<select name="drugclassId" class="ipt">
+							<c:forEach items="${requestScope.drugclassShowAll}" var="bean">
+								<option value="${bean.id}">${bean.name}</option>
+							</c:forEach>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>条形号码：</td>
+					<td align="left">
+						<input type="text" name="barcode" required placeholder="请输入条形号码" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>药　　剂：</td>
+					<td align="left">
+						<input type="text" name="dosageform" required placeholder="请输入药剂" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>规　　格：</td>
+					<td align="left">
+						<input type="text" name="specifications" required placeholder="请输入药品规格" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>单　　位：</td>
+					<td align="left">
+						<select name="unit" class="ipt">
+							<option value="盒" selected>盒</option>
+							<option value="个">个</option>
+							<option value="袋">袋</option>
+							<option value="片">片</option>
+							<option value="粒">粒</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>进货价格：</td>
+					<td align="left">
+						<input type="text" name="prime_cost" required placeholder="请输入进货价格" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>零售价格：</td>
+					<td align="left">
+						<input type="text" name="price" required placeholder="请输入零售价格" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>库存数量：</td>
+					<td align="left">
+						<input type="text" name="inventory" required placeholder="请输入库存数量" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>库存下限：</td>
+					<td align="left">
+						<input type="text" name="minimum" required placeholder="请输入库存下限" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">  </font>简　　介：</td>
+					<td align="left" colspan="3">
+						<textarea class="ipt" name="introduction" 
+							maxlength="80" placeholder="请输入不超过80个字符的药品简介">这是一种药</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="4">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!-- 修改药品表单 -->
+	<div id="dialogBgUpdate"></div>
+	<div id="dialogUpdate" class="animated" style="cursor:default; width: 600px; height: 410px; margin-top:-200px; margin-left: -300px">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="drug/update" method="post" id="editFormUpdate">
+			<input type="hidden" name="id" id="updateId">
+			<table align="center" class="tanstaff">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>药品名称：</td>
+					<td align="left" class="left">
+						<input type="text" name="name" id="updateName" required placeholder="请输入药品的名字" class="ipt">
+					</td>
+					<td align="right" class="right"><font color="#ff0000">  </font>所属类别：</td>
+					<td align="left">
+						<select name="drugclassId" class="ipt" id="updateDrugclassId">
+							<option value="${bean.id}">你猜</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>条形号码：</td>
+					<td align="left">
+						<input type="text" name="barcode" id="updateBarcode" required placeholder="请输入条形号码" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>药　　剂：</td>
+					<td align="left">
+						<input type="text" name="dosageform" id="updateDosageform" required placeholder="请输入药剂" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>规　　格：</td>
+					<td align="left">
+						<input type="text" name="specifications" id="updateSpecifications" 
+							required placeholder="请输入药品规格" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>单　　位：</td>
+					<td align="left">
+						<select name="unit" class="ipt" id="updateUnit">
+							<option value="盒" selected>盒</option>
+							<option value="个">个</option>
+							<option value="袋">袋</option>
+							<option value="片">片</option>
+							<option value="粒">粒</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>进货价格：</td>
+					<td align="left">
+						<input type="text" name="prime_cost" id="updatePrime_cost" 
+							required placeholder="请输入进货价格" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>零售价格：</td>
+					<td align="left">
+						<input type="text" name="price" id="updatePrice" 
+							required placeholder="请输入零售价格" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>库存数量：</td>
+					<td align="left">
+						<input type="text" name="inventory" id="updateInventory" 
+							required placeholder="请输入库存数量" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>库存下限：</td>
+					<td align="left">
+						<input type="text" name="minimum" id="updateMinimum" 
+							required placeholder="请输入库存下限" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">  </font>简　　介：</td>
+					<td align="left" colspan="3">
+						<textarea class="ipt" name="introduction" id="updateIntroduction"
+							maxlength="80" placeholder="请输入不超过80个字符的药品简介"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="4">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<!-- 药品列表 -->
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th class="bg"></th>
+			<th class="bg"><input type="checkbox" name="" class="all" id=""></th>
+			<th class="bg">名称</th>
+			<th class="bg">药品类别</th>
+			<th class="bg">条形码</th>
+			<th class="bg">剂型</th>
+			<th class="bg">规格</th>
+			<th class="bg">单位</th>
+			<th class="bg">进货价</th>
+			<th class="bg">零售价</th>
+			<th class="bg">库存量</th>
+			<th class="bg">库存下限</th>
+			<th class="bg">简介</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<input type="hidden" name="id" class="id" value="${bean.id}">
+				<input type="hidden" name="drugclassId" class="drugclassId" value="${bean.drugclass.id}">
+				<td align="center">1</td>
+				<td><input type="checkbox" name="ck" value="${bean.id}" class="ck" id=""></td>
+				<td class="name">白加黑</td>
+				<td>口服</td>
+				<td class="barcode">不知道</td>
+				<td class="dosageform">你猜</td>
+				<td class="specifications">不知道</td>
+				<td class="unit">盒</td>
+				<td class="prime_cost">12.0</td>
+				<td class="price">24.0</td>
+				<td class="inventory">100</td>
+				<td class="minimum">12</td>
+				<td class="introduction">这是一种药</td>
+			</tr>
+		</tbody>
+		<!-- 分页处理 -->
+		<tfoot>
+			<tr>
+				<td colspan="13">
+					共10条记录 每页 10 条 第1页 
+					<a href="#">首页</a>
+					<a href="#">上一页</a>
+					
+					<a href="#">下一页</a>
+					<a href="#">尾页</a>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
+</html>

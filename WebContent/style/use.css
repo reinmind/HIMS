@@ -1,0 +1,22 @@
+/* 通用格式开始 */
+* {
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+a:hover {
+	color: #f60;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.clear {
+	clear: both;
+}
+/* 通用格式结束 */

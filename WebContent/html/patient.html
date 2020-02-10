@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../style/use.css">
+	<link rel="stylesheet" href="../style/bootstrap.min.css">
+	<link rel="stylesheet" href="../style/table.css">
+	<link rel="stylesheet" href="../style/common.css">
+	<script src="../js/jquery-1.8.3.min.js"></script>
+	<script src="../js/table.js"></script>
+	<script src="../js/btn.js"></script>
+	<script src="../js/patient.js"></script>
+	<script>
+		$(function () {
+			
+			// 显示修改弹框
+			$('.rollIn').click(function(){
+				var count = 0;
+				/* 关于职工的修改项 */
+				var id = "";       /* 病人编号 */
+				var name = "";     /* 病人姓名 */
+				var age = "";      /* 病人年龄 */
+				var gender = "";   /* 性　　别 */
+				var people = "";   /* 民　　族 */
+				var marriage = ""; /* 婚　　否 */
+				var career = "";   /* 职　　业 */
+				var drugAllergy = "";  /* 药物过敏史 */
+				var cardNo = "";     /* 就诊卡卡号*/
+				var balance = "";    /* 卡内余额 */
+				var address = "";    /* 工作单位 */
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+						id = $($(".table").find(":input").get(i)).parent().parent().children(".id").val();
+						name = $($(".table").find(":input").get(i)).parent().parent().children(".name").text().trim();
+						age = $($(".table").find(":input").get(i)).parent().parent().children(".age").text().trim();
+						gender = $($(".table").find(":input").get(i)).parent().parent().children(".gender").text().trim();
+						people = $($(".table").find(":input").get(i)).parent().parent().children(".people").text().trim();
+						marriage = $($(".table").find(":input").get(i)).parent().parent().children(".marriage").text().trim();
+						career = $($(".table").find(":input").get(i)).parent().parent().children(".career").text().trim();
+						drugAllergy = $($(".table").find(":input").get(i)).parent().parent().children(".drugAllergy").text().trim();
+						cardNo = $($(".table").find(":input").get(i)).parent().parent().children(".cardNo").text().trim();
+						balance = $($(".table").find(":input").get(i)).parent().parent().children(".balance").text().trim();
+						address = $($(".table").find(":input").get(i)).parent().parent().children(".address").text().trim();
+						count ++;
+					}
+				}
+				if (count == 0) {
+					alert("请勾选要修改的项");
+				} else if (count == 1) {
+					$("#updateId").val(id);
+					$("#updateName").val(name);
+					$("#updateAge").val(age);
+					if (gender == "男") {
+						$("#updateMen").attr("checked", "true");
+					} else {
+						$("#updateWomen").attr("checked", "false");
+					}
+					$("#updatePeople").val(people);
+					if (marriage == "是") {
+						$("#updateIs").attr("checked", "true");
+					} else {
+						$("#updateNot").attr("checked", "false");
+					}
+					$("#updateCareer").val(career);
+					$("#updateDrugAllergy").val(drugAllergy);
+					
+					$("#updateCardNo").val(cardNo);
+					$("#updateBalance").val(balance);
+					$("#updateAddress").val(address);
+					
+					className = $(this).attr('class');
+					$('#dialogBgUpdate').fadeIn(300);
+					$('#dialogUpdate').removeAttr('class').addClass('animated '+className+'').fadeIn();
+				} else {
+					alert("一次只能修改一行，不能修改多行！");
+				}
+			});
+			
+			// 删除
+			$('.delete').click(function () {
+				var list = "";
+				var count = 0;
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+						list += $($(".table").find(":input").get(i)).val() + ",";
+						count ++;
+					}
+				}
+				if (count != 0) {
+					if (confirm("你确定要删除这" + count + "项吗？")) {
+						if (list != "") {
+							$.post("patientDelAjax", {ids:list}, function (data) {
+								alert(data + "");
+							}, "text");
+							location.href = "patient/patient?currentPage=1";
+						}
+					}
+				} else {
+					alert("您没有选中任何项！");
+				}
+			});
+			
+		});
+		
+	</script>
+</head>
+<body>
+	<p class="btnp">您当前的位置：<a href="../html/welcome.html">首页</a> > 病人基本信息管理</p>
+	<div class="btn_bg">
+		<button type="button" class="btn btn-default add bounceInDown">添加病人</button>
+		<button type="button" class="btn btn-default update rollIn">修改病人</button>
+		<button type="button" class="btn btn-default delete">删除病人</button>
+		<button type="button" class="btn btn-default refresh">刷新</button>
+		<div class="search">
+			<form action="patient/patientName" method="post">
+				<input type="text" class="sea-text" name="name" id="" placeholder="请输入病人姓名">
+				<button type="submit" class="btn btn-primary">搜索</button>
+			</form>
+		</div>
+	</div>
+	
+	
+	<!-- 添加病人表单 -->
+	<div id="dialogBgAdd"></div>
+	<div id="dialogAdd" class="animated" style="cursor:default; width: 600px; height: 410px; margin-top:-200px; margin-left: -300px">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="patient/add" method="post" id="editFormUpdate">
+			<table align="center" class="tanstaff">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>姓　　名：</td>
+					<td align="left" class="left">
+						<input type="text" name="name" required placeholder="请输入病人的姓名" class="ipt">
+					</td>
+					<td align="right" class="right"><font color="#ff0000">* </font>年　　龄：</td>
+					<td align="left">
+						<input type="text" name="age" required placeholder="请输入病人的年龄" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>性　　别：</td>
+					<td align="left">
+						<label for="updateMen" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateMen" name="gender" value="男" checked class="rad">男
+						</label>
+						<label for="updateWomen" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateWomen" name="gender" value="女" class="rad">女
+						</label>
+						<label for="updateSecrecy" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateSecrecy" name="gender" value="保密" class="rad">保密
+						</label>
+					</td>
+					<td align="right"><font color="#ff0000">* </font>民　　族：</td>
+					<td align="left">
+						<input type="text" name="people" required placeholder="请输入病人的民族" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>婚　　否：</td>
+					<td align="left">
+						<label for="updateIs" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateIs" name="marriage" value="是" checked class="rad">是
+						</label>
+						<label for="updateNot" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateNot" name="marriage" value="否" class="rad">否
+						</label>
+					</td>
+					<td align="right"><font color="#ff0000">* </font>职　　业：</td>
+					<td align="left">
+						<input type="text" name="career" required placeholder="请输入病人职业" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>就诊卡卡号：</td>
+					<td align="left">
+						<input type="text" name="cardNo" id="cardNo" style="background:#eee"
+							readonly required placeholder="就诊卡卡号" class="ipt">
+					</td>
+					<td>
+						<select id="auto">
+							<option value="0" selected>就诊卡</option>
+							<option value="1">医保卡</option>
+							<option value="2">其他卡</option>
+						</select>
+					</td>
+					<td id='create'><input id="autoBtn" type="button" value="生成"></td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>卡内余额：</td>
+					<td align="left">
+						<input type="text" name="balance" style="background:#eee"
+							readonly value="0" placeholder="卡内余额" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>药物过敏史：</td>
+					<td align="left">
+						<input type="text" name="drugAllergy" required placeholder="请输入病人的过敏史" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>工作单位：</td>
+					<td align="left" colspan="3">
+						<textarea class="ipt" name="address" required
+							maxlength="80" placeholder="请输入不超过80个字符">${sessionScope.dept.description}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="4">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!-- 修改职工表单 -->
+	<div id="dialogBgUpdate"></div>
+	<div id="dialogUpdate" class="animated" style="cursor:default; width: 600px; height: 410px; margin-top:-200px; margin-left: -300px">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="patient/update" method="post" id="editFormUpdate">
+			<input type="hidden" name="id" id="updateId">
+			<table align="center" class="tanstaff">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>姓　　名：</td>
+					<td align="left" class="left">
+						<input type="text" name="name" id="updateName" required placeholder="请输入病人的姓名" class="ipt">
+					</td>
+					<td align="right" class="right"><font color="#ff0000">* </font>年　　龄：</td>
+					<td align="left" class="left">
+						<input type="text" name="age" id="updateAge" required placeholder="请输入病人的年龄" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">  </font>性　　别：</td>
+					<td align="left">
+						<label for="updateMen" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateMen" name="gender" value="男" checked class="rad">男
+						</label>
+						<label for="updateWomen" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateWomen" name="gender" value="女" class="rad">女
+						</label>
+						<label for="updateSecrecy" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateSecrecy" name="gender" value="保密" class="rad">保密
+						</label>
+					</td>
+					<td align="right"><font color="#ff0000">* </font>民　　族：</td>
+					<td align="left">
+						<input type="text" id="updatePeople" name="people" required placeholder="请输入病人的民族" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>婚　　否：</td>
+					<td align="left">
+						<label for="updateIs" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateIs" name="marriage" value="是" checked class="rad">是
+						</label>
+						<label for="updateNot" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="updateNot" name="marriage" value="否" class="rad">否
+						</label>
+					</td>
+					<td align="right"><font color="#ff0000">* </font>职　　业：</td>
+					<td align="left">
+						<input type="text" name="career" id="updateCareer" required placeholder="请输入病人职业" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>药物过敏史：</td>
+					<td align="left">
+						<input type="text" name="drugAllergy" id="updateDrugAllergy" required placeholder="请输入病人的过敏史" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>就诊/医保卡卡号：</td>
+					<td align="left">
+						<input type="text" name="cardNo" id="updateCardNo" style="background:#eee"
+							 readonly required placeholder="请输入就诊/医保卡卡号" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">* </font>卡内余额：</td>
+					<td align="left">
+						<input type="text" name="balance" id="updateBalance" style="background:#eee"
+							 readonly value="0" placeholder="卡内余额" class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>工作单位：</td>
+					<td align="left" colspan="3">
+						<textarea class="ipt" name="address" id="updateAddress"
+							maxlength="80" placeholder="请输入不超过80个字符"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="4">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<!-- 病人列表 -->
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th class="bg"></th>
+			<th class="bg"><input type="checkbox" name="" class="all" id=""></th>
+			<th class="bg">患者流水号</th>
+			<th class="bg">病人姓名</th>
+			<th class="bg">年龄</th>
+			<th class="bg">性别</th>
+			<th class="bg">民族</th>
+			<th class="bg">婚否</th>
+			<th class="bg">工作单位</th>
+			<th class="bg">职业</th>
+			<th class="bg">药物过敏史</th>
+			<th class="bg">就诊卡卡号</th>
+			<th class="bg">就诊卡余额</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<input type="hidden" name="id" class="id" value="${bean.id}">
+				<td align="center">1</td>
+				<td><input type="checkbox" name="ck" value="${bean.id}" class="ck" id=""></td>
+				<td class="id">1</td>
+				<td class="name">张三</td>
+				<td class="age">15</td>
+				<td class="gender">男</td>
+				<td class="people">汉族</td>
+				<td class="marriage">否</td>
+				<td class="address">江苏省苏州市昆山市</td>
+				<td class="career">工人</td>
+				<td class="drugAllergy">没有</td>
+				<td class="cardNo">1001</td>
+				<td class="balance">298.0</td>
+			</tr>
+		</tbody>
+		<!-- 分页处理 -->
+		<tfoot>
+			<tr>
+				<td colspan="13">
+					共10条记录 每页 10 条 第1页 
+					<a href="#">首页</a>
+					<a href="#">上一页</a>
+					
+					<a href="#">下一页</a>
+					<a href="#">尾页</a>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
+</html>

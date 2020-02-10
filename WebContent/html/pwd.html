@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../style/use.css">
+	<link rel="stylesheet" href="../style/bootstrap.min.css">
+	<style>
+		#all {
+			width: 500px;
+			margin: 30px auto;
+			padding: 30px 50px;
+			border-radius: 20px;
+			border: 1px solid #8DB2E3;
+		}
+		#all div.btns {
+			text-align: center;
+		}
+		#all button.btn {
+			width: 100px;
+			margin: 0 20px;
+			margin-top: 30px;
+		}
+		.btnp {
+			padding-left: 10px;
+			height: 27px;
+			line-height: 27px;
+			font-size: 12px;
+			color: #1542B5;
+			background: url("../images/title_bg2.png");
+		}
+	</style>
+	<script src="../js/jquery-1.8.3.min.js"></script>
+	<script src="../js/pwd.js"></script>
+</head>
+<body>
+	<p class="btnp">您当前的位置：<a href="../html/welcome.jsp">首页</a> > 修改密码</p>
+	<div id="all">
+		<form action="updataPwd" method="post" name="pwdform">
+			<div class="form-group">
+				<label for="exampleInputPassword1">原密码<span></span></label>
+				<input type="password" name="exampleInputPassword1" class="form-control" id="exampleInputPassword1" placeholder="原密码">
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword2">新密码<span></span></label>
+				<input type="password" name="exampleInputPassword2" class="form-control" id="exampleInputPassword2" placeholder="新密码">
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword3">确认密码<span></span></label>
+				<input type="password" name="exampleInputPassword3" class="form-control" id="exampleInputPassword3" placeholder="确认密码">
+			</div>
+			<div class="btns">
+				<button type="submit" class="btn btn-default">确定</button><button type="reset" class="btn btn-default">重置</button>
+			</div>
+		</form>	
+	</div>
+</body>
+</html>

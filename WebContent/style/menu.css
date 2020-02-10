@@ -1,0 +1,88 @@
+
+
+
+
+#title {
+	width: 100%-10px;
+	height: 27px;
+	background: url("../images/title_bg.png");
+	color: #1542A4;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 30px;
+	padding-left: 10px;
+}
+
+
+#con li {
+	height: 35px;
+	background: url("../images/ul_before.png") no-repeat;
+	padding-left: 25px;
+	font-size: 14px;
+	cursor: pointer;
+}
+#con li:hover {
+	background: #eee url("../images/ul_before.png") no-repeat;
+}
+#con li em {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	margin-right: 5px;
+}
+.pwd em {
+	background: url("../images/settings.png") no-repeat;
+}
+.dept em {
+	background: url("../images/dept.png") no-repeat;
+}
+.staff em {
+	background: url("../images/staff.png") no-repeat;
+}
+.drugclass em {
+	background: url("../images/drugclass.png") no-repeat;
+}
+.drug em {
+	background: url("../images/drug.png") no-repeat;
+}
+.checklist em {
+	background: url("../images/checklist.png") no-repeat;
+}
+.other em {
+	background: url("../images/of.png") no-repeat;
+}
+.user2 em {
+	background: url("../images/user2.png") no-repeat;
+}
+.user1 em {
+	background: url("../images/user1.png") no-repeat;
+}
+.user3 em {
+	background: url("../images/user3.png") no-repeat;
+}
+.reg em {
+	background: url("../images/reg.png") no-repeat;
+}
+.money em {
+	background: url("../images/money.png") no-repeat;
+}
+.patient em {
+	background: url("../images/patient.png") no-repeat;
+}
+.medicalrecord em {
+	background: url("../images/medicalrecord.png") no-repeat;
+}
+.register_drug em {
+	background: url("../images/register_drug.png") no-repeat;
+}
+.fee em {
+	background: url("../images/fee.png") no-repeat;
+}
+
+
+
+
+
+
+
+

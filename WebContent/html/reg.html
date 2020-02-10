@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../style/use.css">
+	<link rel="stylesheet" href="../style/bootstrap.min.css">
+	<link rel="stylesheet" href="../style/table.css">
+	<link rel="stylesheet" href="../style/common.css">
+	<script src="../js/jquery-1.8.3.min.js"></script>
+	<script src="../js/table.js"></script>
+	<script src="../js/btn.js"></script>
+	<script src="../js/pid.js"></script>
+	<script>
+		$(function () {
+			
+			// 显示修改弹框
+			$('.rollIn').click(function(){
+				var count = 0;
+				/* 关于挂号的修改项 */
+				var id = "";           /* 挂号编号 */
+				var pId = "";          /* 病人姓名 */
+				var dId = "";          /* 部门名称 */
+				var regfee = "";       /* 挂号费 */
+				var regDate = "";      /* 挂号日期 */
+				var flag = "";         /* 状　　态 */
+				
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+						id = $($(".table").find(":input").get(i)).parent().parent().children(".id").val();
+						pId = $($(".table").find(":input").get(i)).parent().parent().children(".pId").val();
+						dId = $($(".table").find(":input").get(i)).parent().parent().children(".dId").val();
+						regfee = $($(".table").find(":input").get(i)).parent().parent().children(".regfee").text().trim();
+						regDate = $($(".table").find(":input").get(i)).parent().parent().children(".regDate").text().trim();
+						flag = $($(".table").find(":input").get(i)).parent().parent().children(".flag").text().trim();
+						count ++;
+					}
+				}
+				if (flag == "未处理") {
+					flag = 0;
+				} else {
+					flag = 1;
+				}
+				if (count == 0) {
+					alert("请勾选要修改的项");
+				} else if (count == 1) {
+ 					$("#updateId").val(id);
+					$("#updatePatientId").attr("value", pId);
+					$("#updateDeptId").attr("value", dId);
+					$("#updateRegfee").val(regfee);
+					$("#updateToday").val(regDate);
+					if (flag == "0") {
+						$("#addNot").attr("checked", "true");
+					} else {
+						$("#addIs").attr("checked", "false");
+					}
+					
+					className = $(this).attr('class');
+					$('#dialogBgUpdate').fadeIn(300);
+					$('#dialogUpdate').removeAttr('class').addClass('animated '+className+'').fadeIn();
+				} else {
+					alert("一次只能修改一行，不能修改多行！");
+				}
+			});
+			
+			
+			// 删除
+			$('.delete').click(function () {
+				var list = "";
+				var count = 0;
+				for (var i = 1; i < $(".table").find(":input").size(); i ++) {
+					if ($($(".table").find(":input").get(i)).attr("checked")) {
+						list += $($(".table").find(":input").get(i)).val() + ",";
+						count ++;
+					}
+				}
+				if (count != 0) {
+					if (confirm("你确定要删除这" + count + "项吗？")) {
+						if (list != "") {
+						}
+					}
+				} else {
+					alert("您没有选中任何项！");
+				}
+			});
+			
+		});
+	</script>
+</head>
+<body>
+	<p class="btnp">您当前的位置：<a href="../html/welcome.html">首页</a> > 挂号管理</p>
+	<div class="btn_bg">
+		<button type="button" class="btn btn-default add bounceInDown">添加挂号</button>
+		<button type="button" class="btn btn-default update rollIn">修改挂号</button>
+		<button type="button" class="btn btn-default delete">删除挂号</button>
+		<button type="button" class="btn btn-default refresh">刷新</button>
+	</div>
+	
+	<!-- 添加挂号表单 -->
+	<div id="dialogBgAdd"></div>
+	<div id="dialogAdd" class="animated" 
+		style="cursor:default; width: 600px; height: 410px; margin-top:-200px; margin-left: -300px">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="addReg" method="post" id="editFormUpdate">
+			<table align="center" class="tanstaff">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>患者流水号：</td>
+					<td align="left" class="left">
+						<input type="text" name="patientId" id="pId" placeholder="请输入患者流水号" class="ipt">
+					</td>
+					<td align="right" class="right"><font color="#ff0000">  </font>部门名称：</td>
+					<td align="left">
+						<select name="deptId" class="ipt">
+							<option value="${bean.id}">口腔科</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">  </font>患者姓名：</td>
+					<td align="left">
+						<input type="text" name="pName" id="pName" style="background: #eee" 
+							readonly class="ipt" required>
+					</td>
+					<td align="right"><font color="#ff0000">  </font>挂号费：</td>
+					<td align="left">
+						<input type="text" name="regfee" value="${requestScope.namePrice}" 
+							style="background: #eee" readonly class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">  </font>挂号日期：</td>
+					<td align="left">
+						<script>
+							$(function () {
+								$('#today').val(new Date().getFullYear() + "-"
+										+ (new Date().getMonth()+1) + "-"
+										+ new Date().getDate());
+							});
+						</script>
+						<input type="date" id="today" required name="regDate" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">  </font>状　　态：</td>
+					<td align="left">
+						<label for="addNot" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="addNot" name="flag" value="0" checked class="rad">未处理
+						</label>
+						<label for="addIs" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="addIs" name="flag" disabled
+								 style="background: #eee" value="1" class="rad">已处理
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="4">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!-- 修改挂号表单 -->
+	<div id="dialogBgUpdate"></div>
+	<div id="dialogUpdate" class="animated" style="cursor:default; width: 600px; height: 410px; margin-top:-200px; margin-left: -300px">
+		<img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form action="updateReg" method="post" id="editFormUpdate">
+			<input type="hidden" name="id" id="updateId">
+			<table align="center" class="tanstaff">
+				<tr>
+					<td align="right"><font color="#ff0000">* </font>患者流水号：</td>
+					<td align="left" class="left">
+						<input type="text" name="patientId" placeholder="请输入患者流水号" 
+							value="${bean.id}" class="ipt" id="updatePatientId">
+					</td>
+					<td align="right" class="right"><font color="#ff0000">  </font>部门名称：</td>
+					<td align="left">
+						<select name="deptId" class="ipt" id="updateDeptId">
+							<option value="${bean.id}">口腔科</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">  </font>挂号费：</td>
+					<td align="left">
+						<input type="text" name="regfee" id="updateRegfee" value="${requestScope.namePrice}" readonly class="ipt">
+					</td>
+				</tr>
+				<tr>
+					<td align="right"><font color="#ff0000">  </font>挂号日期：</td>
+					<td align="left">
+						<input type="date" id="updateToday" required name="regDate" class="ipt">
+					</td>
+					<td align="right"><font color="#ff0000">  </font>状　　态：</td>
+					<td align="left">
+						<label for="addNot" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="addNot" name="flag" value="0" checked class="rad">未处理
+						</label>
+						<label for="addIs" style="font-size:14px; margin: 0 10px;">
+							<input type="radio" id="addIs" name="flag" value="1" class="rad">已处理
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="4">
+					<input type="submit" value="确定" class="submitBtn" style="margin: 0 5px;">
+					<input type="reset" value="重置" class="submitBtn" style="margin: 0 5px;"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<!-- 挂号列表 -->
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th class="bg"></th>
+			<th class="bg"><input type="checkbox" name="" class="all" id=""></th>
+			<th class="bg">病人姓名</th>
+			<th class="bg">部门名称</th>
+			<th class="bg">挂号费</th>
+			<th class="bg">就诊日期</th>
+			<th class="bg">状态</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<input type="hidden" name="id" class="id" value="${bean.id}">
+				<input type="hidden" name="dId" class="dId" value="${bean.dept.id}">
+				<input type="hidden" name="pId" class="pId" value="${bean.patient.id}">
+				<td align="center">1</td>
+				<td><input type="checkbox" name="ck" value="${bean.id}" class="ck" id=""></td>
+				<td>张三</td>
+				<td>口腔科</td>
+				<td class="regfee">5.0</td>
+				<td class="regDate">2018-2-4</td>
+				<td class="flag">未处理</td>
+			</tr>
+		</tbody>
+		<!-- 分页处理 -->
+		<tfoot>
+			<tr>
+				<td colspan="13">
+					共10条记录 每页 10 条 第1页 
+					<a href="#">首页</a>
+					<a href="#">上一页</a>
+					
+					<a href="#">下一页</a>
+					<a href="#">尾页</a>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
+</html>
