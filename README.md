@@ -7,4 +7,4 @@ Framework: Spring MVC, Hibernate
 
 Uploader:Zhang Xiang
 
-teammate:Diao Dongdong, Xu Kun, Cheng Ziyi,Yu Jiarui,Zhang Juanming,Yu jiarui, Gao Xiang
+Teammates:Diao Dongdong, Xu Kun, Cheng Ziyi,Yu Jiarui,Zhang Juanming, Gao Xiang
